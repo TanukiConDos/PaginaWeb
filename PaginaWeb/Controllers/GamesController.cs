@@ -6,46 +6,40 @@ using System.Text.Json;
 
 namespace PaginaWeb.Controllers
 {
-    public class Juegos : Controller
+    public class GamesController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<GamesController> _logger;
 
-        public Juegos(ILogger<HomeController> logger)
+        public GamesController(ILogger<GamesController> logger)
         {
             _logger = logger;
         }
 
         public IActionResult Priconne()
         {
-            TierList? modelo;
-            try
+            TierList? model;
+            string jsonString = System.IO.File.ReadAllText("Pricone.json");
+            model = JsonSerializer.Deserialize<TierList>(jsonString);
+            if (model == null) model = UpdatePriconeTierList();
+            if (model.Date - DateTime.Today > TimeSpan.FromDays(15))
             {
-                string jsonString = System.IO.File.ReadAllText("Pricone.json");
-                modelo = JsonSerializer.Deserialize<TierList>(jsonString);
-                if (modelo.Date - DateTime.Today > TimeSpan.FromDays(15))
-                {
-                    modelo = ActualizarPriconeTierList();
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                modelo = ActualizarPriconeTierList();
+                model = UpdatePriconeTierList();
             }
             ViewData["Title"] = "Priconne";
-            return View("TierList", modelo);
+            return View("TierList", model);
         }
 
-        private static TierList ActualizarPriconeTierList()
+        private static TierList UpdatePriconeTierList()
         {
             HtmlWeb request = new HtmlWeb();
             var html = request.Load("https://gamewith.jp/pricone-re/article/show/93068");
-            var tabla = html.DocumentNode.SelectSingleNode("//div[@class=\"puri_5col-table\"]");
+            var table = html.DocumentNode.SelectSingleNode("//div[@class=\"puri_5col-table\"]");
             int tier = -1;
             List<List<string>> tiers = new();
             Dictionary<string, string> characterUrl = new();
             Dictionary<string, string> characterImg = new();
             List<string> names = new();
-            foreach (var node in tabla.SelectNodes(tabla.XPath + "/table/tr"))
+            foreach (var node in table.SelectNodes(table.XPath + "/table/tr"))
             {
                 if (node.FirstChild.Name != "th")
                 {
@@ -73,7 +67,7 @@ namespace PaginaWeb.Controllers
                 }
             }
 
-            var modelo = new TierList
+            var model = new TierList
             {
                 Tiers = tiers,
                 CharacterImg = characterImg,
@@ -81,54 +75,49 @@ namespace PaginaWeb.Controllers
                 Date = DateTime.Today,
             };
             
-            string jsonString = JsonSerializer.Serialize(modelo);
+            string jsonString = JsonSerializer.Serialize(model);
             System.IO.File.WriteAllText("pricone.json", jsonString);
 
-            return modelo;
+            return model;
         }
 
         public IActionResult HonkaiStarRail()
         {
-            TierList? modelo;
-            try
+            TierList? model;
+            string jsonString = System.IO.File.ReadAllText("HonkaiStarRail.json");
+            model = JsonSerializer.Deserialize<TierList>(jsonString);
+            if (model == null) model = UpdateHonkaiStarRailTierList();
+            if (model.Date - DateTime.Today > TimeSpan.FromDays(15))
             {
-                string jsonString = System.IO.File.ReadAllText("HonkaiStarRail.json");
-                modelo = JsonSerializer.Deserialize<TierList>(jsonString);
-                if (modelo.Date - DateTime.Today > TimeSpan.FromDays(15))
-                {
-                    modelo = ActualizarHonkaiStarRailTierList();
-                }
+                model = UpdateHonkaiStarRailTierList();
             }
-            catch (FileNotFoundException)
-            {
-                modelo = ActualizarHonkaiStarRailTierList();
-            }
+
 
             ViewData["Title"] = "Honkai Star Rail";
-            return View("TierList",modelo);
+            return View("TierList",model);
         }
 
-        private static TierList ActualizarHonkaiStarRailTierList()
+        private static TierList UpdateHonkaiStarRailTierList()
         {
             HtmlWeb request = new();
             var html = request.Load("https://www.prydwen.gg/star-rail/tier-list/");
-            var tabla = html.DocumentNode.SelectSingleNode("//div[@class=\"custom-tier-list-hsr\"]");
+            var table = html.DocumentNode.SelectSingleNode("//div[@class=\"custom-tier-list-hsr\"]");
             List<List<string>> tiers = new();
             Dictionary<string, string> characterUrl = new();
             Dictionary<string, string> characterImg = new();
             List<string> names = new();
-            foreach (var node in tabla.ChildNodes)
+            foreach (var node in table.ChildNodes)
             {
                 if (node.GetAttributeValue("class", "").Contains(" tier-"))
                 {
                     var tier = node.ChildNodes[1];
-                    foreach (var grupo in tier.ChildNodes)
+                    foreach (var group in tier.ChildNodes)
                     {
-                        if (grupo.GetClasses().Contains("custom-tier-burst"))
+                        if (group.GetClasses().Contains("custom-tier-burst"))
                         {
-                            foreach (var personaje in grupo.ChildNodes)
+                            foreach (var character in group.ChildNodes)
                             {
-                                var a = personaje.ChildNodes[0].ChildNodes[0].ChildNodes[0];
+                                var a = character.ChildNodes[0].ChildNodes[0].ChildNodes[0];
                                 var name = "";
                                 foreach(var span in a.ChildNodes)
                                 {
@@ -152,7 +141,7 @@ namespace PaginaWeb.Controllers
                 }
             }
 
-            var modelo = new TierList
+            var model = new TierList
             {
                 Tiers = tiers,
                 CharacterImg = characterImg,
@@ -160,10 +149,10 @@ namespace PaginaWeb.Controllers
                 Date = DateTime.Today,
             };
 
-            string jsonString = JsonSerializer.Serialize(modelo);
+            string jsonString = JsonSerializer.Serialize(model);
             System.IO.File.WriteAllText("honkaiStarRail.json", jsonString);
 
-            return modelo;
+            return model;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

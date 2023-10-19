@@ -59,13 +59,13 @@ a {
     background-color: #00896f;
 }
 
-.titulo{
+.title{
     position: page;
     left: 40px;
     top: 0px;
 }
 
-.subcontenido
+.subcontent
 {
     display: flex;
     flex-direction: column;
@@ -73,7 +73,7 @@ a {
 
 }
 
-.subcontenido:hover {
+.subcontent:hover {
     color: #00e9bd;
 }
 
