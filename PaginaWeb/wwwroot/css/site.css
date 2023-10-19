@@ -1,0 +1,103 @@
+html {
+    position: relative;
+    min-height: 100%;
+    background-color: #141414;
+    font-size: 16px;
+    min-width: 800px;
+}
+
+body {
+    margin-bottom: 60px;
+    
+    color: azure;
+}
+
+div{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 10px 10px 10px;
+}
+
+h2{
+    font-size: 50px;
+    font-size-adjust: 0.5;
+}
+
+img
+{
+    height: 400px;
+}
+
+
+a {
+    color: azure;
+    text-decoration: none;
+}
+.nav-div {
+    position: relative;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 50px;
+    background-color: #222222;
+    border-radius: 50px;
+}
+
+.tierNumber-div {
+    font-size: 30px;
+    font-size-adjust: 0.5;
+}
+
+.nav-subdiv{
+    padding: 0px 20px 0px 20px;
+    align-content: center;
+    
+}
+
+.nav-subdiv:hover
+{
+    background-color: #00896f;
+}
+
+.titulo{
+    position: page;
+    left: 40px;
+    top: 0px;
+}
+
+.subcontenido
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.subcontenido:hover {
+    color: #00e9bd;
+}
+
+.tierlist-div {
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.tier-div {
+    flex-direction: column;
+    width: 90%;
+    padding-bottom: 10px;
+    background-clip: content-box;
+    background-color: #222222;
+    border-radius: 50px;
+}
+
+.tier-img {
+    height: 150px;
+}
+
+.char-div {
+    align-items: center;
+    flex-direction: column;
+    align-items: center;
+}

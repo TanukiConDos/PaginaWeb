@@ -1,0 +1,30 @@
+﻿@{
+    int count = 0;
+}
+@model PaginaWeb.Models.TierList
+
+<div style="flex-direction:column;align-items:center;">
+    <h2>Tier List</h2>
+    <div class="tierlist-div">
+        @foreach (var tier in @Model.Tiers)
+        {
+            <div class="tier-div">
+                <div class="tierNumber-div">
+                    Tier @count
+                </div>
+                <div>
+                    @foreach (var name in tier)
+                    {
+                        <a href="@Model.CharactersUrl[name]">
+                            <div class="char-div">
+                                <img class="tier-img" src="@Model.CharacterImg[name]">
+                                @name
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+            count++;
+        }
+    </div>
+</div>
