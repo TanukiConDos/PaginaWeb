@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string navDivClass;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,19 +15,51 @@
     <header>
         <nav>
             <div class ="nav-div">
-                
                 <a asp-area="" asp-controller="Home" asp-action="Index">
-                    <div class="nav-div nav-subdiv">
+                    @{
+                        if(@ViewData["Title"] as string == "Home")
+                        {
+                            navDivClass = "nav-div nav-subdiv-hover";
+                        }
+                        else
+                        {
+                            navDivClass = "nav-div nav-subdiv";
+                        }
+                    }  
+                    <div class="@navDivClass">
                         Home
                     </div>
                 </a>
+                
+                
                 <a asp-area="" asp-controller="Games" asp-action="Priconne">
-                    <div class="nav-div nav-subdiv">
+                    @{
+                        if (@ViewData["Title"] as string == "Priconne")
+                        {
+                            navDivClass = "nav-div nav-subdiv-hover";
+                        }
+                        else
+                        {
+                            navDivClass = "nav-div nav-subdiv";
+                        }
+                    }
+
+                    <div class="@navDivClass">
                         Pricone
                     </div>
                 </a>
                 <a asp-area="" asp-controller="Games" asp-action="HonkaiStarRail">
-                    <div class="nav-div nav-subdiv">
+                    @{
+                        if (@ViewData["Title"] as string == "Honkai Star Rail")
+                        {
+                            navDivClass = "nav-div nav-subdiv-hover";
+                        }
+                        else
+                        {
+                            navDivClass = "nav-div nav-subdiv";
+                        }
+                    }
+                    <div class="@navDivClass">
                         Honkai Star Rail
                     </div>
                 </a>

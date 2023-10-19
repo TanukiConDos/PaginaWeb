@@ -59,6 +59,13 @@ a {
     background-color: #00896f;
 }
 
+.nav-subdiv-hover {
+    padding: 0px 20px 0px 20px;
+    align-content: center;
+    background-color: #00896f;
+}
+
+
 .title{
     position: page;
     left: 40px;
