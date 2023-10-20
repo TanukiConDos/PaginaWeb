@@ -17,11 +17,18 @@ namespace PaginaWeb.Controllers
 
         public IActionResult Priconne()
         {
-            TierList? model;
-            string jsonString = System.IO.File.ReadAllText("Pricone.json");
-            model = JsonSerializer.Deserialize<TierList>(jsonString);
-            if (model == null) model = UpdatePriconeTierList();
-            if (model.Date - DateTime.Today > TimeSpan.FromDays(15))
+            TierList model;
+            try
+            {
+                string jsonString = System.IO.File.ReadAllText("Pricone.json");
+                model = JsonSerializer.Deserialize<TierList>(jsonString);
+                model ??= UpdatePriconeTierList();
+            }
+            catch(FileNotFoundException) {
+                model = UpdatePriconeTierList();
+            }
+
+            if (DateTime.Today - model.Date > TimeSpan.FromDays(15))
             {
                 model = UpdatePriconeTierList();
             }
@@ -41,7 +48,17 @@ namespace PaginaWeb.Controllers
             List<string> names = new();
             foreach (var node in table.SelectNodes(table.XPath + "/table/tr"))
             {
-                if (node.FirstChild.Name != "th")
+                if (node.FirstChild.Name == "th")
+                {
+                    if (tier != -1)
+                    {
+                        tiers.Add(names);
+                        names = new();
+                    }
+                    tier++;
+
+                }
+                else
                 {
 
                     foreach (var td in node.ChildNodes)
@@ -55,18 +72,8 @@ namespace PaginaWeb.Controllers
                         characterImg.Add(name, img);
                     }
                 }
-                else
-                {
-                    if (tier != -1)
-                    {
-                        tiers.Add(names);
-                        names = new();
-                    }
-                    tier++;
-
-                }
             }
-
+            tiers.Add(names);
             var model = new TierList
             {
                 Tiers = tiers,
@@ -83,11 +90,18 @@ namespace PaginaWeb.Controllers
 
         public IActionResult HonkaiStarRail()
         {
-            TierList? model;
-            string jsonString = System.IO.File.ReadAllText("HonkaiStarRail.json");
-            model = JsonSerializer.Deserialize<TierList>(jsonString);
-            if (model == null) model = UpdateHonkaiStarRailTierList();
-            if (model.Date - DateTime.Today > TimeSpan.FromDays(15))
+            TierList model;
+            try
+            {
+                string jsonString = System.IO.File.ReadAllText("honkaiStarRail.json");
+                model = JsonSerializer.Deserialize<TierList>(jsonString);
+                model ??= UpdateHonkaiStarRailTierList();
+            }
+            catch (FileNotFoundException)
+            {
+                model = UpdateHonkaiStarRailTierList();
+            }
+            if (DateTime.Today - model.Date > TimeSpan.FromDays(15))
             {
                 model = UpdateHonkaiStarRailTierList();
             }
@@ -118,13 +132,15 @@ namespace PaginaWeb.Controllers
                             foreach (var character in group.ChildNodes)
                             {
                                 var a = character.ChildNodes[0].ChildNodes[0].ChildNodes[0];
-                                var name = "";
-                                foreach(var span in a.ChildNodes)
+                                var div = a.ChildNodes[0].ChildNodes[0];
+                                string name = "";
+                                foreach(var child in div.ChildNodes)
                                 {
-                                    if (span.GetAttributeValue("class","") == "emp-name")
+                                    if (child.Name == "noscript")
                                     {
-                                        name = span.InnerText;
-                                        continue;
+                                        HtmlDocument innerHtml = new();
+                                        innerHtml.LoadHtml(child.InnerHtml);
+                                        name = innerHtml.DocumentNode.SelectSingleNode("//picture/img").GetAttributeValue("alt", "");
                                     }
                                 }
                                 var url = "https://www.prydwen.gg" + a.GetAttributeValue("href","");
