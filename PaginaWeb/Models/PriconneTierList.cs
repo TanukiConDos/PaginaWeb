@@ -1,33 +1,27 @@
 ﻿using HtmlAgilityPack;
-using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace PaginaWeb.Models
 {
     public class PriconneTierList: TierList
     {
+        public PriconneTierList() : base("Priconne")
+        {
+        }
 
-        public override void Update()
+        protected override void Update(Game game)
         {
             HtmlWeb request = new HtmlWeb();
             var html = request.Load("https://gamewith.jp/pricone-re/article/show/93068");
             var table = html.DocumentNode.SelectSingleNode("//div[@class=\"puri_5col-table\"]");
             int tier = -1;
-            List<List<string>> tiers = new();
-            Dictionary<string, string> characterUrl = new();
-            Dictionary<string, string> characterImg = new();
-            List<string> names = new();
-            foreach (var node in table.SelectNodes(table.XPath + "/table/tr"))
+            
+            foreach (var node in table.SelectNodes("./table/tr"))
             {
                 if (node.FirstChild.Name == "th")
                 {
-                    if (tier != -1)
-                    {
-                        tiers.Add(names);
-                        names = new();
-                    }
                     tier++;
-
                 }
                 else
                 {
@@ -37,22 +31,28 @@ namespace PaginaWeb.Models
                         if (td.FirstChild == null) continue;
                         var url = td.FirstChild.GetAttributeValue("href", "");
                         var name = td.FirstChild.GetDirectInnerText();
-                        names.Add(name);
-                        characterUrl.Add(name, url);
                         var img = td.FirstChild.ChildNodes[0].GetAttributeValue("data-original", "");
-                        characterImg.Add(name, img);
+                        Character c = new()
+                        {
+                            gameName = gameName,
+                            name = name,
+                            url = url,
+                            img = img,
+                            game = game,
+                            tier = tier
+                        };
+                        tierListsDb.Characters.Add(c);
+                        tierListsDb.SaveChanges();
                     }
                 }
             }
-            tiers.Add(names);
+            game.numTiers = tier;
+            game.date = DateTime.Now;
 
-            Tiers = tiers;
-            CharacterImg = characterImg;
-            CharactersUrl = characterUrl;
-            Date = DateTime.Today;
 
-            string jsonString = JsonSerializer.Serialize(this);
-            System.IO.File.WriteAllText("pricone.json", jsonString);
+            tierListsDb.Update(game);
+
+            tierListsDb.SaveChanges();
         }
     }
 }

@@ -63,6 +63,21 @@
                         Honkai Star Rail
                     </div>
                 </a>
+                <a asp-area="" asp-controller="Games" asp-action="Nikke">
+                    @{
+                        if (@ViewData["Title"] as string == "Nikke")
+                        {
+                            navDivClass = "nav-div nav-subdiv-hover";
+                        }
+                        else
+                        {
+                            navDivClass = "nav-div nav-subdiv";
+                        }
+                    }
+                    <div class="@navDivClass">
+                        Nikke
+                    </div>
+                </a>
             </div>
         </nav>
     </header>

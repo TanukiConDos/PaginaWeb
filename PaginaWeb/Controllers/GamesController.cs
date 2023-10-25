@@ -1,8 +1,6 @@
-﻿using HtmlAgilityPack;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PaginaWeb.Models;
 using System.Diagnostics;
-using System.Text.Json;
 
 namespace PaginaWeb.Controllers
 {
@@ -17,63 +15,28 @@ namespace PaginaWeb.Controllers
 
         public IActionResult Priconne()
         {
-            TierList? model = null;
-            bool update = false;
-            try
-            {
-                string jsonString = System.IO.File.ReadAllText("Pricone.json");
-                model = JsonSerializer.Deserialize<PriconneTierList>(jsonString);
-            }
-            catch(FileNotFoundException) {
-                update = true;
-            }
-
-            if (model == null || DateTime.Today - model.Date > TimeSpan.FromDays(15))
-            {
-                update = true;
-            }
-
-            if (update)
-            {
-                model = new PriconneTierList();
-                model.Update();
-            }
-
+            PriconneTierList model = new();
+            
             ViewData["Title"] = "Priconne";
             return View("TierList", model);
         }
 
         public IActionResult HonkaiStarRail()
         {
-            TierList? model = null;
-            bool update = false;
-            try
-            {
-                string jsonString = System.IO.File.ReadAllText("honkaiStarRail.json");
-                model = JsonSerializer.Deserialize<HonkaiStarRailTierList>(jsonString);
-            }
-            catch (FileNotFoundException)
-            {
-                update = true;
-            }
-
-            if (model == null || DateTime.Today - model.Date > TimeSpan.FromDays(15))
-            {
-                update = true;
-            }
-
-            if (update)
-            {
-                model = new HonkaiStarRailTierList();
-                model.Update();
-            }
-
+            
+            HonkaiStarRailTierList model = new();
 
             ViewData["Title"] = "Honkai Star Rail";
             return View("TierList",model);
         }
 
-        
+        public IActionResult Nikke()
+        {
+            NikkeTierList model = new();
+
+            ViewData["Title"] = "Nikke";
+            return View("TierList", model);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -13,12 +13,12 @@
                     Tier @count
                 </div>
                 <div>
-                    @foreach (var name in tier)
+                    @foreach (var character in tier)
                     {
-                        <a href="@Model.CharactersUrl[name]">
+                        <a href="@character.url">
                             <div class="char-div">
-                                <img class="tier-img" src="@Model.CharacterImg[name]">
-                                @name
+                                <img class="tier-img" src="@character.img">
+                                @character.name
                             </div>
                         </a>
                     }

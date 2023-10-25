@@ -5,15 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject></StartupObject>
+    <UserSecretsId>59914d07-efaa-4162-a62e-604437d72324</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.48" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.54" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\img\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>
