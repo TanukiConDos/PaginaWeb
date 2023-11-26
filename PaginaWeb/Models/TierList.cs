@@ -48,7 +48,7 @@ namespace PaginaWeb.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=.\\Data\\SQlLiteDatabase.db");
+            optionsBuilder.UseSqlite("Data Source=.\\wwwroot\\Data\\SQlLiteDatabase.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

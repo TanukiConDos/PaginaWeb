@@ -40,7 +40,9 @@ namespace PaginaWeb.Models
                                     game = game,
                                     tier = numTier
                                 };
-                                tierListsDb.Characters.Add(c);
+                                var cAux = tierListsDb.Characters.Find(c.name);
+                                if (cAux == null) tierListsDb.Characters.Add(c);
+                                else cAux = c;
                                 tierListsDb.SaveChanges();
 
                             }
