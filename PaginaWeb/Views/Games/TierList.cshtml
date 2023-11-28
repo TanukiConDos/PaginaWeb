@@ -1,12 +1,12 @@
 ﻿@{
     int count = 0;
 }
-@model PaginaWeb.Models.TierList
+@model List<List<Character>>
 
 <div style="flex-direction:column;align-items:center;">
     <h2>Tier List</h2>
     <div class="tierlist-div">
-        @foreach (var tier in @Model.Tiers)
+        @foreach (var tier in @Model)
         {
             <div class="tier-div">
                 <div class="tierNumber-div">

@@ -1,10 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using PaginaWeb.Models;
+using PaginaWeb.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<TierListsDbContext>(options =>
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("default"));
+});
+builder.Services.AddTransient<TierlistUpdater>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
